@@ -17,7 +17,7 @@ def preprocess_image(input_path):
 
 def main():
     # path to your images
-    path = "/Users/shhreya/hindi-ocr/inputtext/introduction"
+    path = "/Users/shhreya/hindi-ocr/inputtext/part2:4"
     tempPath = "/Users/shhreya/hindi-ocr/outputtext"
 
     if not os.path.exists(tempPath):
