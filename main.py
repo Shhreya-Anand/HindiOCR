@@ -4,6 +4,7 @@ import os
 
 def preprocess_image(input_path):
     img = Image.open(input_path)
+
     # Convert to grayscale
     img = img.convert("L")
 
@@ -16,37 +17,46 @@ def preprocess_image(input_path):
     return img
 
 def main():
-    # path to your images
-    path = "/Users/shhreya/hindi-ocr/inputtext/part2:4"
-    tempPath = "/Users/shhreya/hindi-ocr/outputtext"
+    # Path to your images
+    base_input_path = "/Users/shhreya/hindi-ocr/inputtext"
+    base_output_path = "/Users/shhreya/hindi-ocr/outputtext"
 
-    if not os.path.exists(tempPath):
-        os.makedirs(tempPath)
+    # Ensure the base output directory exists
+    os.makedirs(base_output_path, exist_ok=True)
 
-    for image_name in os.listdir(path):
-        input_path = os.path.join(path, image_name)
-        
-        if not image_name.lower().endswith(('.png', '.jpg', '.jpeg', '.HEIC')): #fun fact heic doesnt work
-            continue
+    # Walk through the entire input directory- use os.walk
+    for root, _, files in os.walk(base_input_path):
+        for image_name in files:
+            if not image_name.lower().endswith(('.png', '.jpg', '.jpeg', '.heic')):  # Handle image formats, but fin fact heic doesnt work
+                continue
 
-        try:
-            # Preprocess the image
-            img = preprocess_image(input_path)
+            input_path = os.path.join(root, image_name)
 
-            # Perform OCR
-            text = pt.image_to_string(img, lang="hin")
-            
-            # Save the output text
-            image_name_without_ext = image_name[0:-4]  # Remove the file extension
-            output_file_path = os.path.join(tempPath, image_name_without_ext + ".txt")
+            # Get the relative path of the image (e.g., part1/4)
+            relative_path = os.path.relpath(root, base_input_path)
 
-            with open(output_file_path, "w", encoding='utf-8') as file:
-                file.write(text)
+            # Create the corresponding output folder
+            output_folder = os.path.join(base_output_path, relative_path)
+            os.makedirs(output_folder, exist_ok=True)
 
-            print(f"Text extracted from {image_name} and saved to {output_file_path}")
-        
-        except Exception as e:
-            print(f"Error processing {image_name}: {e}")
+            try:
+                # Preprocess the image
+                img = preprocess_image(input_path)
+
+                # Perform OCR
+                text = pt.image_to_string(img, lang="hin")
+
+                # Save the output text
+                image_name_without_ext = os.path.splitext(image_name)[0]  # Remove the file extension
+                output_file_path = os.path.join(output_folder, f"{image_name_without_ext}.txt")
+
+                with open(output_file_path, "w", encoding='utf-8') as file:
+                    file.write(text)
+
+                print(f"Text extracted from {image_name} and saved to {output_file_path}")
+
+            except Exception as e:
+                print(f"Error processing {image_name}: {e}")
 
 if __name__ == '__main__':
     main()
