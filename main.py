@@ -26,7 +26,7 @@ def main():
     for image_name in os.listdir(path):
         input_path = os.path.join(path, image_name)
         
-        if not image_name.lower().endswith(('.png', '.jpg', '.jpeg', '.HEIC')):
+        if not image_name.lower().endswith(('.png', '.jpg', '.jpeg', '.HEIC')): #fun fact heic doesnt work
             continue
 
         try:
