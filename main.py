@@ -18,8 +18,8 @@ def preprocess_image(input_path):
 
 def main():
     # Path to your images
-    base_input_path = "/Users/shhreya/hindi-ocr/inputtext"
-    base_output_path = "/Users/shhreya/hindi-ocr/outputtext"
+    base_input_path = "/Users/shhreya/hindi-ocr/inputtext/part1:4"
+    base_output_path = "/Users/shhreya/hindi-ocr/outputtext/part1:4"
 
     # Ensure the base output directory exists
     os.makedirs(base_output_path, exist_ok=True)
